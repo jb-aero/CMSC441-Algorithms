@@ -270,6 +270,8 @@ void PosInt::sub (const PosInt& x) {
 }
 
 /******************** MULTIPLICATION ********************/
+#include <iostream>
+using namespace std;
 
 // Computes dest = x * y, digit-wise.
 // x has length xlen and y has length ylen.
@@ -278,12 +280,15 @@ void PosInt::sub (const PosInt& x) {
 void PosInt::mulArray 
   (int* dest, const int* x, int xlen, const int* y, int ylen) 
 {
-  for (int i=0; i<xlen+ylen; ++i) dest[i] = 0;
+  for (int i=0; i<xlen+ylen; ++i)
+    dest[i] = 0;
   for (int i=0; i<xlen; ++i) {
     for (int j=0; j<ylen; ++j) {
       dest[i+j] += x[i] * y[j];
+      cout << x[i] << " * " << y[j] << " = " << dest[i+j] << endl;
       dest[i+j+1] += dest[i+j] / B;
       dest[i+j] %= B;
+      cout << "[ " << dest[i+j] << " " << dest[i+j+1] << endl;
     }
   }
 }
@@ -307,13 +312,15 @@ void PosInt::mul(const PosInt& x) {
 
   int mylen = digits.size();
   int xlen = x.digits.size();
+  cout << "Will mul a " << mylen << " by a " << xlen << endl;
   if (mylen == 0 || xlen == 0) {
     set(0);
     return;
   }
 
   int* mycopy = new int[mylen];
-  for (int i=0; i<mylen; ++i) mycopy[i] = digits[i];
+  for (int i=0; i<mylen; ++i)
+    mycopy[i] = digits[i];
   digits.resize(mylen + xlen);
   mulArray(&digits[0], mycopy, mylen, &x.digits[0], xlen);
 

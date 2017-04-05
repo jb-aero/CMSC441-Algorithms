@@ -1,6 +1,9 @@
 #include <iostream>
+#include <cstdlib>
 #include "posint.h"
 using namespace std;
+
+void work();
 
 int main() {
 
@@ -12,8 +15,53 @@ int main() {
   // space-efficient to use the default, but then the
   // numbers will print in binary.
   
+  PosInt::setBase(10,1);
+  //work();
+
+  PosInt::setBase(16,1);
+  //work();
+
   PosInt::setBase(16,3);
-  
+  work();
+
+  cout << 35 / 10 << endl;
+  cout << 35 % 10 << endl;
+}
+
+void work()
+{
+  PosInt t(16);
+  PosInt v(3);
+  t.pow(v);
+  cout << "t = 16^3  = " << t << endl;
+  cout << "t =       = ";
+  t.print_array(cout);
+  cout << endl << endl;
+  t.add(PosInt(16 * 16 * 16 - 1));
+  cout << "t =       = " << t << endl;
+  cout << "t =       = ";
+  t.print_array(cout);
+  cout << endl << endl;
+
+  PosInt u(17);
+  cout << "u =  17   = " << u << endl;
+  cout << "u         = ";
+  u.print_array(cout);
+  cout << endl << endl;
+
+  PosInt w(255);
+  cout << "w =  255  = " << w << endl;
+  cout << "w         = ";
+  w.print_array(cout);
+  cout << endl << endl;
+
+  w.mul(u);
+  cout << "w = 255*17 = " << w << endl;
+  cout << "w          = ";
+  w.print_array(cout);
+  cout << endl << endl;
+ 
+  /*
   // PosInt::setBase(10, 4);
 
   // x = 2^128
@@ -45,6 +93,7 @@ int main() {
   // z = z mod x
   z.mod(x);
 
-  cout << "z^2 mod x = " << z << endl;
+  cout << "z^2 mod x = " << z << endl;*/
+  cout << "########################################" << endl << endl;
 }
   
