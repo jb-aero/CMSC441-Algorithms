@@ -277,8 +277,7 @@ using namespace std;
 // x has length xlen and y has length ylen.
 // dest must have size (xlen+ylen) to store the result.
 // Uses standard O(n^2)-time multiplication.
-void PosInt::mulArray 
-  (int* dest, const int* x, int xlen, const int* y, int ylen) 
+void PosInt::mulArray (int* dest, const int* x, int xlen, const int* y, int ylen) 
 {
   for (int i=0; i<xlen+ylen; ++i)
     dest[i] = 0;
@@ -288,7 +287,7 @@ void PosInt::mulArray
       cout << x[i] << " * " << y[j] << " = " << dest[i+j] << endl;
       dest[i+j+1] += dest[i+j] / B;
       dest[i+j] %= B;
-      cout << "[ " << dest[i+j] << " " << dest[i+j+1] << endl;
+      cout << "[ " << dest[i+j] << " " << dest[i+j+1] << " ]" << endl;
     }
   }
 }
@@ -299,6 +298,10 @@ void PosInt::mulArray
 void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
 
   // Karatsuba's method goes here
+	if (len == 1) {
+		mulArray(dest, x, len, y, len);
+		return;
+	}
 
 }
 
@@ -330,9 +333,25 @@ void PosInt::mul(const PosInt& x) {
 
 // this = this * x, using Karatsuba's method
 void PosInt::fastMul(const PosInt& x) {
-
-  // Set-up and call to fastMulArray() goes here
-
+	if (this == &x) {
+		PosInt xcopy(x);
+		mul(xcopy);
+		return;
+	}
+	
+	int mylen = digits.size();
+	if (mylen != x.digits.size())
+		return; // should give a warning?
+	cout << "Will fastmul two " << mylen << "-bit #s " << endl;
+	
+	int* mycopy = new int[mylen];
+	for (int i=0; i<mylen; ++i)
+		mycopy[i] = digits[i];
+	digits.resize(2 * mylen);
+	fastMulArray(&digits[0], mycopy, &x.digits[0], mylen);
+	
+	normalize();
+	delete [] mycopy;
 }
 
 /******************** DIVISION ********************/

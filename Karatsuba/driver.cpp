@@ -19,10 +19,10 @@ int main() {
   //work();
 
   PosInt::setBase(16,1);
-  //work();
+  work();
 
   PosInt::setBase(16,3);
-  work();
+  //work();
 
   cout << 35 / 10 << endl;
   cout << 35 % 10 << endl;
@@ -43,8 +43,8 @@ void work()
   t.print_array(cout);
   cout << endl << endl;
 
-  PosInt u(17);
-  cout << "u =  17   = " << u << endl;
+  PosInt u(167);
+  cout << "u =  167  = " << u << endl;
   cout << "u         = ";
   u.print_array(cout);
   cout << endl << endl;
@@ -56,10 +56,27 @@ void work()
   cout << endl << endl;
 
   w.mul(u);
-  cout << "w = 255*17 = " << w << endl;
-  cout << "w          = ";
+  cout << "w = 255*167 = " << w << endl;
+  cout << "w           = ";
   w.print_array(cout);
   cout << endl << endl;
+  
+  PosInt a(167);
+  PosInt b(255);
+  b.fastMul(a);
+  cout << "b = 255*167 = " << b << endl;
+  cout << "b           = ";
+  b.print_array(cout);
+  cout << endl << endl;
+  
+  PosInt j(6);
+  PosInt k(7);
+  j.fastMul(k);
+  cout << "j = 6*7 = " << j << endl;
+  cout << "j       = ";
+  j.print_array(cout);
+  cout << endl << endl;
+  
  
   /*
   // PosInt::setBase(10, 4);
