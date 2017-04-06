@@ -30,6 +30,18 @@ class PosInt {
     static int Bpow;
    
     std::vector<int> digits;
+	
+	// Adds two arrays
+	// if x and y are not the same length, x should be the bigger
+	// dest must be large enough for the sum
+	static void addArrays (int* dest, const int* x, const int* y, int xlen, int ylen);
+	
+	// Subtracts y from x
+	// x MUST be bigger
+	static void subtractArrays (int* dest, const int* x, const int* y, int xlen, int ylen);
+	
+	// Returns true if all values of the array are zero
+	static bool isArrayZero (const int* a, int len);
 
     // Removes leading 0 digits
     void normalize();

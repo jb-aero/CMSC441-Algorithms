@@ -296,13 +296,169 @@ void PosInt::mulArray (int* dest, const int* x, int xlen, const int* y, int ylen
 // x and y have the same length (len)
 // dest must have size (2*len) to store the result.
 void PosInt::fastMulArray (int* dest, const int* x, const int* y, int len) {
-
-  // Karatsuba's method goes here
+	
+	// Base case, regular mult for single digits
 	if (len == 1) {
 		mulArray(dest, x, len, y, len);
 		return;
 	}
+	
+	for (int i=0; i<len; ++i)
+		dest[i] = 0;
+	
+	// Determine the halfway point of the digit
+	int hlen = len/2;
+	
+	// Determine if one half is bigger (odd number len)
+	int olen = (len % 2 ? hlen + 1 : hlen);
 
+	int* x1 = new int[olen];
+	int* y1 = new int[olen];
+	int* x2 = new int[hlen];
+	int* y2 = new int[hlen];
+	
+	// Fill the first portions, which may be larger
+	for (int i = hlen, j = 0; j < olen;) {
+		x1[j] = x[i];
+		y1[j] = y[i];
+		i++;
+		j++;
+	}
+	
+	// Fill the second portions
+	for (int i = 0, j = 0; j < hlen;) {
+		x2[j] = x[i];
+		y2[j] = y[i];
+		i++;
+		j++;
+	}
+	
+	// Verification of split
+	cout << "x  = ";
+	for (int i = 0; i < len; i++)
+		cout << x[i] << " ";
+	cout << endl << "x1 = ";
+	for (int i = 0; i < olen; i++)
+		cout << x1[i] << " ";
+	cout << endl << "x2 = ";
+	for (int i = 0; i < hlen; i++)
+		cout << x2[i] << " ";
+	cout << endl;
+	cout << "y  = ";
+	for (int i = 0; i < len; i++)
+		cout << y[i] << " ";
+	cout << endl << "y1 = ";
+	for (int i = 0; i < olen; i++)
+		cout << y1[i] << " ";
+	cout << endl << "y2 = ";
+	for (int i = 0; i < hlen; i++)
+		cout << y2[i] << " ";
+	cout << endl;
+	
+	int* r = new int[olen*2];
+	cout << "About to calc r..." << endl;
+	fastMulArray(r, x1, y1, olen);
+	
+	cout << "r = ";
+	for (int i = 0; i < olen*2; i++)
+		cout << r[i] << " ";
+	cout << endl;
+	
+	int* w = new int[olen*2];
+	cout << "About to calc w..." << endl;
+	fastMulArray(w, x2, y2, hlen);
+	
+	cout << "w = ";
+	for (int i = 0; i < olen*2; i++)
+		cout << w[i] << " ";
+	cout << endl;
+	
+	int* xsum = new int[olen+1];
+	int* ysum = new int[olen+1];
+	
+	addArrays(xsum, x1, x2, olen, hlen);
+	addArrays(ysum, y1, y2, olen, hlen);
+	
+	// size of the arrays to use for u
+	// basically, can we omit a leading 0?
+	int ulen = (xsum[olen] == 0 && ysum[olen] == 0 ? 2*olen : 2*olen+2);
+	int* u = new int[ulen];
+	cout << "About to calc u..." << endl;
+	fastMulArray(u, xsum, ysum, (xsum[olen] == 0 && ysum[olen] == 0 ? olen : olen+1));
+	
+	cout << "u = ";
+	for (int i = 0; i < ulen; i++)
+		cout << u[i] << " ";
+	cout << endl;
+	
+	// Woops, looks like I need a method to subtract one array from another
+	// diff = u - (r + w)
+	// p = r*B*B + diff*B + w
+	
+	// (copied from driver)
+	// adapting this to size of dest would be how I determine the final value of each digit
+	/*
+	int three, two, one, zero, b, c, d, a = 42585;
+	b = a % (16*16*16);
+	three = a - b;
+	c = b % (16*16);
+	two = b - c;
+	d = c % 16;
+	one = c - d;
+	zero = d;
+	cout << "a = " << a << endl;
+	cout << "3 = " << three << endl;
+	cout << "2 = " << two << endl;
+	cout << "1 = " << one << endl;
+	cout << "0 = " << zero << endl;
+	*/
+	
+	delete [] x1;
+	delete [] x2;
+	delete [] y1;
+	delete [] y2;
+	
+	delete [] xsum;
+	delete [] ysum;
+	
+	delete [] r;
+	delete [] w;
+	delete [] u;
+}
+
+// Adds two arrays in base B
+// if x and y are not the same length, x should be the bigger
+// dest must be xlen + 1 long
+void PosInt::addArrays (int* dest, const int* x, const int* y, int xlen, int ylen) {
+	
+	for (int i = 0; i < xlen; i++)
+		dest[i] = x[i];
+	dest[xlen] = 0;
+	
+	for (int i = 0; i < ylen; i++) {
+		dest[i] += y[i];
+		dest[i+1] += dest[i] / B;
+		dest[i] %= B;
+	}
+	
+	cout << "x + y = ";
+	for (int i = 0; i < (xlen+1); i++)
+		cout << dest[i] << " ";
+	cout << endl << endl;
+}
+
+void PosInt::subtractArrays (int* dest, const int* x, const int* y, int xlen, int ylen) {
+	// If I left myself more time I would have come up with a clever way to do this
+}
+
+bool PosInt::isArrayZero (const int* a, int len) {
+	for (int i = 0; i < len; i++) {
+		if (a[i] != 0) {
+			cout << i << " was " << a[i] << endl;
+			return false;
+		}
+	}
+	return true;
 }
 
 // this = this * x

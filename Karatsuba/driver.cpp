@@ -16,16 +16,27 @@ int main() {
   // numbers will print in binary.
   
   PosInt::setBase(10,1);
-  //work();
+  work();
 
   PosInt::setBase(16,1);
-  work();
+  //work();
 
   PosInt::setBase(16,3);
   //work();
-
-  cout << 35 / 10 << endl;
-  cout << 35 % 10 << endl;
+  
+  int three, two, one, zero, b, c, d, a = 42585;
+  b = a % (16*16*16);
+  three = a - b;
+  c = b % (16*16);
+  two = b - c;
+  d = c % 16;
+  one = c - d;
+  zero = d;
+  cout << "a = " << a << endl;
+  cout << "3 = " << three << endl;
+  cout << "2 = " << two << endl;
+  cout << "1 = " << one << endl;
+  cout << "0 = " << zero << endl;
 }
 
 void work()
