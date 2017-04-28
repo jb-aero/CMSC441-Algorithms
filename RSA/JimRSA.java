@@ -80,7 +80,8 @@ public class JimRSA
 		BigInteger phin = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 		
 		// e - a small odd integer relatively prime to Phi(n)
-		BigInteger e = BigInteger.valueOf(3);
+		// 
+		BigInteger e = BigInteger.valueOf(65537);
 		Triple<BigInteger> eer = extendedEuclid(e, phin);
 		while (!eer.L().equals(BigInteger.ONE))
 		{
