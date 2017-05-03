@@ -10,6 +10,7 @@
 **/
 
 import java.math.BigInteger;
+import java.util.Random;
 
 public class JimFactor
 {
@@ -17,7 +18,11 @@ public class JimFactor
 	
 	public static void main(String... args)
 	{
-		
+		if (args.length > 0)
+		{
+			pollardRho(new BigInteger(args[0]));
+		}
+		System.out.println("You should pass the number to factor as the argument.");
 	}
 	
 	/**
@@ -39,23 +44,31 @@ public class JimFactor
 	*/
 	public static void pollardRho(BigInteger n)
 	{
-		unsigned int i = 1;
+		long i = 1;
 		BigInteger x;
+		System.out.println("Attempting to get x between 0 and n-1...");
 		do {
 			x = new BigInteger(n.bitLength(), rand);
-		} while (x.compare(n) > 0 || x.compare(BigInteger.ZERO) < 0);
+		} while (x.compareTo(n) > 0 || x.compareTo(BigInteger.ZERO) < 0);
 		BigInteger y = x;
-		unsigned int k = 2;
+		long k = 2;
+		BigInteger d, b;
+		System.out.println("Okay, got our random starting x, beginning the loop...");
+		
 		while (true)
 		{
 			i = i + 1;
 			x = x.pow(2).subtract(BigInteger.ONE).mod(n);
 			d = n.gcd(y.subtract(x));
-			if (d != 1 && d != n) {
-				System.out.println(d);
+			if (!d.equals(BigInteger.ONE) && !d.equals(n)) {
+				System.out.println("FACTOR: " + d);
+				b = n.divide(d);
+				System.out.println(n + " / " + d + " = " + b);
+				System.out.println(d + " * " + b + " = " + d.multiply(b));
 			}
 			if (i == k) {
 				y = x;
+				System.out.println(k + ": " + y);
 				k = 2 * k;
 			}
 		}
