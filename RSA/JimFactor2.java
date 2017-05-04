@@ -39,17 +39,18 @@ public class JimFactor2
 				System.out.print("Automatically ");
 				if (n.bitLength() > 120)
 				{
-					System.out.println("Using Brent's variant factorization...");
+					System.out.println("using Brent's variant factorization...");
 					brent(n);
 				}
 				else
 				{
-					System.out.println("Using Pollard Rho factorization...");
+					System.out.println("using Pollard Rho factorization...");
 					pollardRho(n);
 				}
 			}
+		} else {
+			System.out.println("You should pass the number to factor as the argument.");
 		}
-		System.out.println("You should pass the number to factor as the argument.");
 	}
 	
 	/**
@@ -155,23 +156,27 @@ public class JimFactor2
 		} while (!(m.compareTo(n) < 0) || m.compareTo(BigInteger.ZERO) < 0);
 		System.out.println("Okay, got our random starting y,c,m, beginning the loop...");
 		
-		long r = 1;
-		BigInteger g = q = BigInteger.ONE;
-		BigInteger ys, x, k, minMRK, f;
+		BigInteger r, q, g;
+		g = BigInteger.ONE;
+		q = BigInteger.ONE;
+		r = BigInteger.ONE;
+		BigInteger ys = y, x = y, k, minMRK, f, i;
 		
 		while (g.equals(BigInteger.ONE))
 		{
 			x = y;
-			for (long i = 0; i < r; i++)
+			for (i = BigInteger.ZERO; i.compareTo(r) < 0; i = i.add(BigInteger.ONE))
 			{
 				y = y.pow(2).mod(n).add(c).mod(n);
+				//System.out.println("--\nr = " + r + "\ni = " + i);
 			}
 			k = BigInteger.ZERO;
 			while (k.compareTo(r) < 0 && g.equals(BigInteger.ONE))
 			{
+				//System.out.println("---\nr = " + r + "\nk = " + k + "\ng = " + g);
 				ys = y;
 				minMRK = m.min(r.subtract(k));
-				for (BigInteger i = BigInteger.zero; i.compareTo(minMRK) < 0; i.add(BigInteger.ONE))
+				for (i = BigInteger.ZERO; i.compareTo(minMRK) < 0; i = i.add(BigInteger.ONE))
 				{
 					y = y.pow(2).mod(n).add(c).mod(n);
 					q = q.multiply(x.subtract(y).abs()).mod(n);
@@ -179,7 +184,7 @@ public class JimFactor2
 				g = q.gcd(n);
 				k = k.add(m);
 			}
-			r = r * 2;
+			r = r.multiply(TWO);
 		}
 		if (g.equals(n))
 		{
