@@ -5,8 +5,8 @@
 **	Project 2 part 2
 **
 **	JimFactor.java
-**	To build me,	$ javac JimFactor.java
-**	To run me,		$ java JimFactor
+**	To build me,	$ javac JimFactor2.java
+**	To run me,		$ java JimFactor2
 **/
 
 import java.math.BigInteger;
